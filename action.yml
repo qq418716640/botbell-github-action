@@ -1,0 +1,76 @@
+name: 'BotBell Notify & Approve'
+description: 'Send push notifications and approval requests to your phone via BotBell'
+author: 'BotBell'
+branding:
+  icon: 'bell'
+  color: 'blue'
+
+inputs:
+  token:
+    description: 'BotBell Bot Token (bt_...)'
+    required: true
+  mode:
+    description: 'Action mode: "notify" (default) or "approve"'
+    required: false
+    default: 'notify'
+  message:
+    description: 'Message body (required)'
+    required: true
+  title:
+    description: 'Message title'
+    required: false
+  url:
+    description: 'URL to attach'
+    required: false
+  image_url:
+    description: 'Image URL'
+    required: false
+  format:
+    description: 'Message format: "text" (default) or "markdown"'
+    required: false
+  actions:
+    description: 'JSON array of action buttons (approve mode). Default: [{"key":"approve","label":"Approve"},{"key":"reject","label":"Reject"}]'
+    required: false
+  timeout:
+    description: 'Max seconds to wait for approval (default: 1800)'
+    required: false
+    default: '1800'
+  poll_interval:
+    description: 'Seconds between poll requests (default: 5)'
+    required: false
+    default: '5'
+  api_base:
+    description: 'API base URL (default: https://api.botbell.app/v1)'
+    required: false
+    default: 'https://api.botbell.app/v1'
+
+outputs:
+  message_id:
+    description: 'ID of the sent message'
+  delivered:
+    description: 'Whether the push was delivered to a device'
+  approved:
+    description: 'Whether the approval was granted (approve mode only)'
+  action:
+    description: 'Action key selected by user (approve mode only)'
+  reply:
+    description: 'User reply text (approve mode only)'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: BotBell
+      shell: bash
+      env:
+        BOTBELL_TOKEN: ${{ inputs.token }}
+        BOTBELL_MODE: ${{ inputs.mode }}
+        BOTBELL_MESSAGE: ${{ inputs.message }}
+        BOTBELL_TITLE: ${{ inputs.title }}
+        BOTBELL_URL: ${{ inputs.url }}
+        BOTBELL_IMAGE_URL: ${{ inputs.image_url }}
+        BOTBELL_FORMAT: ${{ inputs.format }}
+        BOTBELL_ACTIONS: ${{ inputs.actions }}
+        BOTBELL_TIMEOUT: ${{ inputs.timeout }}
+        BOTBELL_POLL_INTERVAL: ${{ inputs.poll_interval }}
+        BOTBELL_API_BASE: ${{ inputs.api_base }}
+      run: ${{ github.action_path }}/botbell.sh
