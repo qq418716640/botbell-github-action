@@ -10,6 +10,10 @@ MESSAGE="${BOTBELL_MESSAGE:?Message is required}"
 TIMEOUT="${BOTBELL_TIMEOUT:-1800}"
 POLL_INTERVAL="${BOTBELL_POLL_INTERVAL:-5}"
 
+# ── Dependency check ─────────────────────────────────────────────────
+
+command -v jq >/dev/null 2>&1 || { echo "::error::BotBell: jq is required but not installed"; exit 1; }
+
 # ── Helpers ──────────────────────────────────────────────────────────
 
 build_body() {
@@ -49,11 +53,23 @@ send_push() {
 }
 
 poll_replies() {
-    local response
-    response=$(curl -s -X GET "${API_BASE}/messages/poll" \
+    local response http_code
+    response=$(curl -s -w "\n%{http_code}" -X GET "${API_BASE}/messages/poll" \
         -H "X-Bot-Token: ${TOKEN}" \
         -H "User-Agent: botbell-github-action/0.1.0")
-    echo "$response"
+
+    http_code=$(echo "$response" | tail -1)
+    local resp_body
+    resp_body=$(echo "$response" | sed '$d')
+
+    if [ "$http_code" -ge 400 ]; then
+        local err_msg
+        err_msg=$(echo "$resp_body" | jq -r '.message // "Unknown error"' 2>/dev/null || echo "$resp_body")
+        echo "::error::BotBell: Poll failed (HTTP ${http_code}): ${err_msg}"
+        exit 1
+    fi
+
+    echo "$resp_body"
 }
 
 # ── Notify Mode ──────────────────────────────────────────────────────
