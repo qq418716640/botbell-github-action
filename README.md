@@ -1,3 +1,5 @@
+[English](README.md) | [中文](README.zh-CN.md)
+
 # BotBell GitHub Action
 
 Send pipeline notifications and approval requests to your phone via [BotBell](https://botbell.app).
