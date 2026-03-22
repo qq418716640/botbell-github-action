@@ -9,7 +9,7 @@ Send pipeline notifications and approval requests to your phone via [BotBell](ht
 ### Notify on build result
 
 ```yaml
-- uses: botbell/notify-action@v1
+- uses: qq418716640/botbell-github-action@v1
   if: always()
   with:
     token: ${{ secrets.BOTBELL_TOKEN }}
@@ -22,7 +22,7 @@ Send pipeline notifications and approval requests to your phone via [BotBell](ht
 ### Approval gate before deploy
 
 ```yaml
-- uses: botbell/notify-action@v1
+- uses: qq418716640/botbell-github-action@v1
   id: approval
   with:
     token: ${{ secrets.BOTBELL_TOKEN }}
@@ -56,7 +56,7 @@ jobs:
         run: make test
 
       - name: Request Approval
-        uses: botbell/notify-action@v1
+        uses: qq418716640/botbell-github-action@v1
         id: approval
         with:
           token: ${{ secrets.BOTBELL_TOKEN }}
@@ -73,7 +73,7 @@ jobs:
 
       - name: Notify Success
         if: success()
-        uses: botbell/notify-action@v1
+        uses: qq418716640/botbell-github-action@v1
         with:
           token: ${{ secrets.BOTBELL_TOKEN }}
           title: "✅ Deployed"
@@ -81,7 +81,7 @@ jobs:
 
       - name: Notify Failure
         if: failure()
-        uses: botbell/notify-action@v1
+        uses: qq418716640/botbell-github-action@v1
         with:
           token: ${{ secrets.BOTBELL_TOKEN }}
           title: "❌ Deploy Failed"
@@ -116,7 +116,7 @@ jobs:
 ## Custom Actions
 
 ```yaml
-- uses: botbell/notify-action@v1
+- uses: qq418716640/botbell-github-action@v1
   with:
     token: ${{ secrets.BOTBELL_TOKEN }}
     mode: approve

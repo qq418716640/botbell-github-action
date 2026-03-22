@@ -9,7 +9,7 @@
 ### 构建结果通知
 
 ```yaml
-- uses: botbell/notify-action@v1
+- uses: qq418716640/botbell-github-action@v1
   if: always()
   with:
     token: ${{ secrets.BOTBELL_TOKEN }}
@@ -22,7 +22,7 @@
 ### 部署前审批门控
 
 ```yaml
-- uses: botbell/notify-action@v1
+- uses: qq418716640/botbell-github-action@v1
   id: approval
   with:
     token: ${{ secrets.BOTBELL_TOKEN }}
@@ -56,7 +56,7 @@ jobs:
         run: make test
 
       - name: Request Approval
-        uses: botbell/notify-action@v1
+        uses: qq418716640/botbell-github-action@v1
         id: approval
         with:
           token: ${{ secrets.BOTBELL_TOKEN }}
@@ -73,7 +73,7 @@ jobs:
 
       - name: Notify Success
         if: success()
-        uses: botbell/notify-action@v1
+        uses: qq418716640/botbell-github-action@v1
         with:
           token: ${{ secrets.BOTBELL_TOKEN }}
           title: "✅ 已部署"
@@ -81,7 +81,7 @@ jobs:
 
       - name: Notify Failure
         if: failure()
-        uses: botbell/notify-action@v1
+        uses: qq418716640/botbell-github-action@v1
         with:
           token: ${{ secrets.BOTBELL_TOKEN }}
           title: "❌ 部署失败"
@@ -116,7 +116,7 @@ jobs:
 ## 自定义 Actions
 
 ```yaml
-- uses: botbell/notify-action@v1
+- uses: qq418716640/botbell-github-action@v1
   with:
     token: ${{ secrets.BOTBELL_TOKEN }}
     mode: approve
